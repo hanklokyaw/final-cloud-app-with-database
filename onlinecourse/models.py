@@ -54,17 +54,16 @@ class Learner(models.Model):
 
 # Course model
 class Course(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    # )
     name = models.CharField(null=False, max_length=30, default='online course')
     image = models.ImageField(upload_to='course_images/')
     description = models.CharField(max_length=1000)
     pub_date = models.DateField(null=True)
     instructors = models.ManyToManyField(Instructor)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Enrollment')
-    lesson = models.ManyToManyField(Question)
     total_enrollment = models.IntegerField(default=0)
     is_enrolled = False
 
@@ -75,10 +74,10 @@ class Course(models.Model):
 
 # Lesson model
 class Lesson(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    # )
     title = models.CharField(max_length=200, default="title")
     order = models.IntegerField(default=0)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -105,7 +104,7 @@ class Enrollment(models.Model):
 
 
 # <HINT> Create a Question Model with:
-class Question(models.Model1):
+class Question(models.Model):
     question = models.TextField()
     grade = models.IntegerField(default=0)
     lesson = models.IntegerField(default=0)
@@ -143,15 +142,14 @@ class Question(models.Model1):
 
 
 #  <HINT> Create a Choice Model with:
-class Choice(models.Model1):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-    lesson = models.ManyToManyField(Question)
-    choice = models.TextField()
-    correct = models.BooleanField()
-    question = models.TextField()
+class Choice(models.Model):
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    # )
+    choice_text = models.CharField(max_length=100, default="text")
+    is_correct = models.BooleanField(default=False)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     # Used to persist choice content for a question
     # One-To-Many (or Many-To-Many if you want to reuse choices) relationship with Question
     # Choice content
@@ -161,10 +159,10 @@ class Choice(models.Model1):
 
 
 # <HINT> The submission model
-class Submission(models.Model1):
+class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     chocies = models.ManyToManyField(Choice)
-    Other fields and methods you would like to design
+#    Other fields and methods you would like to design
 # One enrollment could have multiple submission
 # One submission could have multiple choices
 # One choice could belong to multiple submissions
